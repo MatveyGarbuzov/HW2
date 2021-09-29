@@ -21,8 +21,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "ViewController"
         view.backgroundColor = UIColor.darkGray
-        
+        print("ViewControllerLoaded")
         setupLocationTextView()
         setupSettingsButton()
         locationManager.requestWhenInUseAuthorization()
@@ -59,17 +60,17 @@ class ViewController: UIViewController {
         settingsView.backgroundColor = UIColor.lightGray
         settingsView.alpha = 0
         settingsView.layer.cornerRadius = 12
-        
+
         settingsView.translatesAutoresizingMaskIntoConstraints = false
         settingsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
             constant: 45
         ).isActive = true
-        
+
         settingsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
             constant: -45
         ).isActive = true
-        
-        
+
+
         settingsView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         settingsView.heightAnchor.constraint(equalToConstant: 300).isActive = true
     }
@@ -160,10 +161,24 @@ class ViewController: UIViewController {
         }
     }
     
+    private var buttonCount = 0
     @objc private func settingsButtonPressed() {
-        UIView.animate(withDuration: 0.1, animations: {
-        self.settingsView.alpha = 1 - self.settingsView.alpha
-        })
+        switch buttonCount {
+        case 0, 1:
+            UIView.animate(withDuration: 0.1, animations: {
+                self.settingsView.alpha = 1 - self.settingsView.alpha
+            })
+        case 2:
+            navigationController?.pushViewController(
+                SettingsViewController(),
+                animated: true
+            )
+        case 3:
+            present(SettingsViewController(), animated: true, completion: nil)
+        default:
+            buttonCount = -1
+        }
+        buttonCount += 1
     }
 }
 
